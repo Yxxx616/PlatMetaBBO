@@ -11,9 +11,10 @@ platmetabbo.m
 
 # Quick Start
 1. 训练一个meta-optimier
-- platmetabbo('task', @Train, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+- platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 2. 测试训练好的meta-optimizer
-- platmetabbo('task', @Test, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+- 使用预切分的测试集测试：platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
+- 使用指定的单个函数测试：platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB_F1')
 
 # NOTE
 1. 训练时搭配的meta-optimizer和base-optimizer和环境在测试时要保持一致。
