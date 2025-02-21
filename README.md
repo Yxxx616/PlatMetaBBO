@@ -14,7 +14,6 @@ platmetabbo.m
 - platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 2. 测试训练好的meta-optimizer
 - 使用预切分的测试集测试：platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
-- 使用指定的单个函数测试：platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB_F1')
 
 # NOTE
 1. 写自己的MetaBBO时需要先定义base-optimizer，思考参数化哪部分（学习base-optimizer的什么东西），然后设计metaoptimizer的输入也就是state，然后根据state的大小在Environment中定义observationInfo和actionInfo。
