@@ -4,7 +4,7 @@
 - *建议：有platemo基础的同学食用更佳*
 
 # V0.1
-- GUI还不完善奥，只能测试用（test和exp都可以，其余两个功能模块还未修改）
+- GUI未包含训练过程，只能用于测试。
 
 # Main function
 platmetabbo.m
