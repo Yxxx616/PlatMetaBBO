@@ -4,22 +4,22 @@
 - *建议：有platemo基础的同学食用更佳*
 
 # V0.1
-- GUI还不完善奥，只能测试用（test和exp都可以，其余两个功能模块还未修改）
+- GUI未包含训练过程，只能用于测试。
 
 # Main function
 platmetabbo.m
 
 # Quick Start
 1. 训练一个meta-optimier
-- platmetabbo('task', @Train, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+- platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 2. 测试训练好的meta-optimizer
-- platmetabbo('task', @Test, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+- 使用预切分的测试集测试：platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 
 # NOTE
-1. 训练时搭配的meta-optimizer和base-optimizer和环境在测试时要保持一致。
-2. 训练的参数在Train.m中修改（包括训练集的具体问题设置），测试的参数在Test.m中修改（包括测试集的具体问题设置）。
-3. 使用命令行测试时只可以测试一个算法，但是测试问题可以通过修改'problemSet'参数的值为'LIRCMOP'、'CF'等platEMO包含的任何测试问题集，只需要测试问题集的名字即可，具体该集合下的哪些测试问题需要在Test.m中修改。
-4. 测试时建议选择用GUI，直接运行platmetabbo.m，进入到GUI界面，选择test模块或exp模块，再选择自己训练好的meta-optimizer对应的base-optimizer，test可以测试单独函数，exp可以测试多个函数并且可以和任何platemo里想对比的算法进行对比试验！！不过需要在GUI的test或者exp文件中设置一下自己的meta-optimizer和environment哦。
+1. 写自己的MetaBBO时需要先定义base-optimizer，思考参数化哪部分（学习base-optimizer的什么东西），然后设计metaoptimizer的输入也就是state，然后根据state的大小在Environment中定义observationInfo和actionInfo。
+2. 训练的参数在Train.m中修改，测试的参数在Test.m中修改。训练集和测试集的切分在Utils下的splitProblemSet函数中修改。如果想在各种各样的问题集上进行训练，可以新建一个问题集名字，把你想用于训练的问题都放进去，然后统一一个命名规范即可。
+3. 使用命令行测试时只可以测试一个算法，但是测试问题可以通过修改'problemSet'参数的值为'LIRCMOP'、'CF'等platEMO包含的任何测试问题集，只需要测试问题集的名字即可。
+4. 测试时建议选择用GUI，直接运行platmetabbo.m，进入到GUI界面，选择test模块或exp模块，再选择自己训练好的base-optimizer(点击标签“learned”可以快速找到这些学习型算法)，test可以测试单独函数，exp可以测试多个函数并且可以和任何platemo里想对比的算法进行对比试验！！
 
 # Conclusion
 暂且先这样啦，后续再更新说明文档
