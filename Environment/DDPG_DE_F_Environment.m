@@ -29,7 +29,7 @@ classdef DDPG_DE_F_Environment < rl.env.MATLABEnvironment
             ObservationInfo.Description = '';
 
             % Initialize BOparameters settings    /
-            ActionInfo = rlNumericSpec([1 1],'LowerLimit',0,'UpperLimit',2);
+            ActionInfo = rlNumericSpec([1 1],'LowerLimit',0.5,'UpperLimit',1);
             ActionInfo.Name = 'BOparameters';
             ActionInfo.Description = 'DE-F ONLINE TUNING';
 

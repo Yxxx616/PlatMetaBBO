@@ -39,9 +39,12 @@ function varargout = platmetabbo(varargin)
 %   displays the GUI of platMetaBBO.
 %
 %%  Train meta-optimizer
-%   platmetabbo('task', @Train, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+%   platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 %%  Test meta-optimizer
-%   platmetabbo('task', @Test, 'metaOptimizer', @PPOCMO, 'baseOptimizer', @ppoNSGAII, 'env', @EPSILONCMOAADEnvironment, 'problemSet','LIRCMOP','N',100,'maxFE',20000,'D',10)
+%   platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
+%% Test traditional optimization algorithm 
+%   refer to platemo
+%   platmetabbo('algorithm',@GA,'problem',@SOP_F1,'N',50,'maxFE',20000)
 
 
     cd(fileparts(mfilename('fullpath')));
