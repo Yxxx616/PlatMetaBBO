@@ -17,6 +17,7 @@ classdef DDPG_DE_F_Baseoptimizer < BASEOPTIMIZER
         Population
         NP
         baseperformance
+        curBP
         
         CR
         F
@@ -33,6 +34,7 @@ classdef DDPG_DE_F_Baseoptimizer < BASEOPTIMIZER
             [~,baseOptimizer.consNum] = size(baseOptimizer.Population.cons);
             baseOptimizer.NP = problem.N;
             baseOptimizer.baseperformance = min(baseOptimizer.Population.objs);
+            baseOptimizer.curBP = baseOptimizer.baseperformance;
         end
         
         function [reward, nextState, done, bestPop] = update(baseOptimizer,BOparameters,Problem)
@@ -43,18 +45,27 @@ classdef DDPG_DE_F_Baseoptimizer < BASEOPTIMIZER
             nextState = calSOPState(baseOptimizer);
             nofinish = baseOptimizer.NotTerminated(baseOptimizer.Population);
             done = ~nofinish;
-            curBP = min(baseOptimizer.Population.objs);
-            if isnan(curBP)
-                curBP = baseOptimizer.baseperformance;
+            currentBP = min(baseOptimizer.Population.objs);
+            if isnan(currentBP)
+                currentBP = baseOptimizer.curBP;
+                reward = -10;
+            elseif currentBP - baseOptimizer.curBP > 0
                 reward = -1;
-            elseif curBP - baseOptimizer.baseperformance >=0
-                reward = 0;
+            elseif currentBP - baseOptimizer.curBP == 0
+                reward  = 0;
             else
                 reward = 1;
             end
-            baseOptimizer.baseperformance = min(curBP,baseOptimizer.baseperformance);
+            baseOptimizer.curBP = currentBP;
+            baseOptimizer.baseperformance = min(currentBP,baseOptimizer.baseperformance);
+            if baseOptimizer.baseperformance > 1e-8
+                reward = reward - 1;
+            end
             if done
                 bestPop = baseOptimizer.Population;
+                if baseOptimizer.baseperformance < 1e-8
+                    reward = reward + 100;
+                end
             else
                 bestPop = 0;
             end

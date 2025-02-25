@@ -153,8 +153,8 @@ classdef platMetaBBOmodule_test < handle
                         for i = 2:length(parts)-1
                             comp = strcat(comp, '_', parts{i}); % 重新拼接前两部分
                         end
-                        env = str2func([metabboComponents '_Environment']);
-                        mo = str2func([metabboComponents '_Metaoptimizer']);
+                        env = str2func([comp '_Environment']);
+                        mo = str2func([comp '_Metaoptimizer']);
                         task = Test(mo, ALG, env, PRO);
                         task.run();
                         obj.cb_stop();

@@ -46,11 +46,9 @@ elseif strcmp(problemset,'CEC2017')
         end
     end
 else
-    for i = 1:10
-        trainingSet{i} = eval(sprintf('UF%d', i));
-        testingSet{i} = eval(sprintf('UF%d', i));
-    end
+    trainingSet{1} = problemset;
+    testingSet{1} = problemset;
 end
-            
+        
 end
 
