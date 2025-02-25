@@ -110,13 +110,12 @@ function [mo, bo, env, problemSet] = getConfig(Setting)
     
     index = isStr(find(strcmp(Setting(isStr),'problemSet'),1)) + 1;
     if isempty(index)
-        error('Fail to use platmetabbo since there is no problems!');
+        problemSet.proIns = @UserProblem;
     elseif iscell(Setting{index})
-        problemSet.psName = Setting{index}{1};
+        problemSet.pName = Setting{index}{1};
         problemSet.pSetting = [Setting,{'parameter'},{Setting{index}(2:end)}];
     else
-        problemSet.psName = Setting{index};
-        problemSet.pSetting = Setting; % all input parameters
+        problemSet.pName = Setting{index};
     end
 end
 

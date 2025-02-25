@@ -7,71 +7,63 @@ function features = calFeatures(bo)
     objs = bo.Population.objs;
     n = size(decs, 1); % Number of individuals
     
-    state = [];
-    state(end+1) = min(objs);
-    state(end+1) = max(objs);
-    state(end+1) = mean(objs);
-    state(end+1) = std(objs);
-    state(end+1) = skeness(objs);
-    state(end+1) = kurtosis(objs);
-    
-
-    dist_matrix = squareform(pdist(decs));
-    state(5) = sum(mean(dist_matrix(:)));
-    
-    state(6) = sum(std(decs));
-    
-%% Fitness distance correlation
-    % 计算最优解（最优解是适应度值最小的解）
-    [~, best_idx] = min(objs);
-    best_solution = decs(best_idx, :);
-
-    % 计算每个解到最优解的欧几里得距离
-    D = zeros(n, 1);
-    for i = 1:n
-        D(i) = norm(decs(i, :) - best_solution);
-    end
-
-    % 计算适应度值的平均值和方差
-    f_bar = state(3);
-    delta_F = state(4);
-
-    % 计算距离的平均值和方差
-    d_bar = mean(D);
-    delta_D = std(D);
-
-    % 计算适应度值和距离的协方差
-    C_FD = 0;
-    for i = 1:n
-        C_FD = C_FD + (objs(i) - f_bar) * (D(i) - d_bar);
-    end
-    C_FD = C_FD / n;
-
-    % 计算 FDC
-    state(7) = C_FD / (delta_F * delta_D);
-    
-%%  最优值个数
-    % 根据距离对个体进行排序
-    [~, idx] = sort(D);
-    sorted_objs = objs(idx);
-
-    % 初始化局部适应度景观评估指标
-    chi = 0;
-
-    % 计算局部适应度景观评估指标
-    for i = 1:n-1
-        if sorted_objs(i+1) <= sorted_objs(i)
-            chi = chi + 1;
-        end
-    end
-
-    % 归一化指标
-    state(8)  = chi / n;
-    
-%% QUANTILES
-
-    p = 0:0.25:1;
-    y = quantile(objs,p);
-    state(9:end) = y';
+    features = [min(objs); max(objs); mean(objs); std(objs); calculate_ela_distribution(objs);calculate_ela_meta(decs,objs)];
 end
 
+
+function metaF = calculate_ela_meta(X, y)
+    % 计算线性模型的特征
+    % 输入: X (设计矩阵), y (目标值)
+    % 输出: features (包含特征的结构体)
+
+    % 线性回归模型
+    mdl = fitlm(X, y);
+    
+    % 提取特征
+    metaF = [mdl.Coefficients.Estimate(1);mdl.Coefficients.Estimate(2:end);mdl.Rsquared.Adjusted;]; %截距 %系数 %调整后的 R²
+end
+
+function pcaF = calculate_pca(X, y)
+    % 计算 PCA 特征
+    % 输入: X (设计矩阵), y (目标值)
+    % 输出: features (包含特征的结构体)
+
+    % 合并 X 和 y
+    data = [X, y];
+    
+    % 计算 PCA
+    [coeff, ~, latent] = pca(data);
+    
+    % 提取特征  
+    pcaF = [latent ./ sum(latent); latent(1) / sum(latent)]; % 解释方差  % 第一主成分的解释方差
+end
+
+function nbcF = calculate_nbc(X, y)
+    % 计算最近邻特征
+    % 输入: X (设计矩阵), y (目标值)
+    % 输出: features (包含特征的结构体)
+
+    % 计算最近邻距离
+    nbrs = createns(X, 'NSMethod', 'kdtree');
+    [~, dist] = knnsearch(nbrs, X, 'K', 2); % 找到每个点的最近邻
+    
+    % 提取特征
+    nbcF = zeros(2,1); 
+    nbcF(1) = mean(dist(:, 2)); % 最近邻距离的均值
+    nbcF(2) = std(dist(:, 2)); % 最近邻距离的标准差
+end
+
+function difF = calculate_ela_distribution(y)
+    % 计算目标值的分布特征
+    % 输入: y (目标值)
+    % 输出: 峰值数量
+
+    % 计算偏度和峰度
+    ske = skewness(y); % 偏度
+    kur = kurtosis(y); % 峰度
+    
+    % 计算峰值数量
+    [f, xi] = ksdensity(y); % 核密度估计
+    peaks = findpeaks(f); % 找到峰值
+    difF = [ske;kur;length(peaks)]; % 峰值数量
+end

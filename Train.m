@@ -8,10 +8,10 @@ classdef Train < handle
         env
     end
     methods
-        function obj = Train(mo, bo, envName, problemsetName)
+        function obj = Train(mo, bo, envName, problemset)
             obj.BaseOptimizer = bo();
-            obj.TrainingSetName = problemsetName;
-            [obj.TrainingSet, ~] = splitProblemSet(problemsetName);
+            obj.TrainingSetName = problemset.psName;
+            [obj.TrainingSet, ~] = splitProblemSet(problemset);
             obj.env = envName(obj.TrainingSet,obj.BaseOptimizer,'train');
             obsInfo = getObservationInfo(obj.env);
             actInfo = getActionInfo(obj.env);
