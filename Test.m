@@ -3,12 +3,19 @@ classdef Test < handle
         MetaOptimizer
         BaseOptimizer
         TestingSet
+        TestingSetName
         env
     end
     methods
         function obj = Test(mo, bo, envConfig, problemset)
             obj.BaseOptimizer = bo();
-            [~, obj.TestingSet] = splitProblemSet(problemset);
+            if isa(problemset,'struct')
+                obj.TestingSetName = problemset.psName;
+                [~, obj.TestingSet] = splitProblemSet(problemset);
+            elseif isa(problemset, 'handle')
+                obj.TestingSetName = class(problemset);
+                obj.TestingSet{1} = problemset;
+            end
             obj.env = envConfig(obj.TestingSet,obj.BaseOptimizer,'test');
             fn = load(['AgentModel/', functions(mo).function, '_finalAgent.mat']);
             obj.MetaOptimizer = fn.agent;

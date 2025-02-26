@@ -37,7 +37,8 @@ classdef TemplateRLMetaOptimizer < rl.agent.CustomAgent
                 'GradientThreshold', 1, ...
                 'BatchSize', 32);
         end
-        
+    end
+    methods (Access = protected)
         function action = getActionImpl(obj, observation)
             % 实现策略决策逻辑
             % 输入：
