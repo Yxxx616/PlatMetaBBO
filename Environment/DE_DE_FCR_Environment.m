@@ -8,6 +8,8 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
         baseoptimizer
         problemSet
         curPIdx
+        indCount
+        metaNP = 20 %need to set the same with corresponding meta-optimizer
     end
     
     properties
@@ -22,9 +24,9 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
     methods              
         % Contructor method creates an instance of the environment
         % Change class name and constructor name accordingly
-        function this = DE_DE_FCR_Environment(ps, bo, task)
+        function this = DE_DE_FCR_Environment(ps, bo, ~)
             % Initialize Observation settings
-            ObservationInfo = rlFiniteSetSpec([1:length(ps)]);
+            ObservationInfo = rlFiniteSetSpec(1:length(ps));
             ObservationInfo.Name = 'ProblemIdx';
             ObservationInfo.Description = 'F_';
             
@@ -37,6 +39,10 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
             this.problemSet = ps;
             this.baseoptimizer = bo;
             this.curPIdx = 1;
+            this.indCount = 0;
+        end
+        function metanp = getmetanp(this)
+            metanp = this.metaNP;
         end
         function InitialObservation = reset(this)
             if this.curPIdx > length(this.problemSet)
@@ -45,21 +51,30 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
             this.curProblem = this.problemSet{this.curPIdx};
             this.baseoptimizer.Init(this.curProblem)
             InitialObservation = this.curPIdx;
-            this.curProblemState = InitialObservation;
         end
        
         function [Observation,Reward,IsDone,LoggedSignals] = step(this, BOparameters)
             IsDone = false;
+            [Reward, ~, ~, ~] = this.baseoptimizer.update(BOparameters, this.curProblem);
+            this.indCount = this.indCount + 1;
+            
+            
+            if this.indCount >= this.metaNP
+                this.curPIdx = this.curPIdx + 1;
+                this.indCount = 0;
+            end
+            
+            
             if this.curPIdx > length(this.problemSet)
-                IsDone = True;
+                IsDone = true;
+                this.curProblem = this.problemSet{1}; 
+            else
+                this.curProblem = this.problemSet{this.curPIdx};
             end
+            this.baseoptimizer.Init(this.curProblem);
             LoggedSignals = [];
-            for i = length(BOparameters)
-                [r, Observation, ~, ~] = this.baseoptimizer.update(BOparameters(i), this.curProblem);
-                Reward(i) = r;
-            end
             this.IsDone = IsDone;
-            this.curProblemState = this.curPIdx;
+            Observation = this.curPIdx;
         end
     end
 end

@@ -3,77 +3,102 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
     % 继承自rl.agent.CustomAgent，实现必要接口
     
     properties
-        metaPopulation
-        metaNP = 50
-        metaTable 
-        problemSet
-        
-        ExperienceBuffer = struct(...
-            'Observations', {}, ...
-            'Actions', {}, ...
-            'Rewards', {}, ...
-            'NextObservations', {}, ...
-            'IsDone', {})
+        metaTable
+        metaObj
+        indcount
+        metapop
+        metaNP = 20
     end
     
     methods
         function obj = DE_DE_FCR_Metaoptimizer(observationInfo, actionInfo)
             obj = obj@rl.agent.CustomAgent();
-            obj.metaTable = containers.Map('KeyType', 'char', 'ValueType', 'any');
-            obj.metaPopulation = rand(obj.metaNP, actionInfo.Dimension(1));
             for i = 1:length(observationInfo.Elements)
-                obj.metaTable(num2str(i))=obj.metaPopulation;
+                obj.metaTable(i).population= rand(obj.metaNP,actionInfo.Dimension(1));
+                obj.metaTable(i).fitness = -Inf * ones(obj.metaNP,1);
+                obj.metapop(i).population = [];
+                obj.metapop(i).fitness = [];
             end
             obj.ObservationInfo = observationInfo;
             obj.ActionInfo = actionInfo;
+            obj.indcount = 1;
         end
     end
     methods (Access = protected)
         function action = getActionImpl(obj,observation)
-            obsKey = class(obj.problemSet{observation});
-            % 检查 observationStr 是否是 metaTable 的一个键
-            if isKey(obj.metaTable, obsKey)
+            if observation{1} <= length(obj.ObservationInfo.Elements)
                 % 如果键存在，获取对应的值
-                action = obj.metaTable(obsKey).population;
+                curpop = obj.metaTable(observation{1}).population;
+                curobj = obj.metaTable(observation{1}).fitness;
+                [~,minidx]=min(curobj);
+                action = curpop(minidx,:);
             else
-                action = repmat(rand(2,1),obj.metaNP,1);
+                action = rand(obj.ActionInfo.Dimension);
             end
-            action = saturate(this.ActionInfo,action);
-            action = max(min(action, obj.ActionInfo.UpperLimit), ...
-                        obj.ActionInfo.LowerLimit);
         end
         function action = getActionWithExplorationImpl(obj, observation)
-            obsKey = class(obj.problemSet{observation});
-            % 检查 observationStr 是否是 metaTable 的一个键
-            if isKey(obj.metaTable, obsKey)
-                % 如果键存在，获取对应的值
-                action = obj.metaTable(obsKey).population;
-            else
-                action = repmat(rand(2,1),obj.metaNP,1);
+            if obj.indcount>obj.metaNP
+                obj.indcount = 1;
             end
+            if observation{1} <= length(obj.ObservationInfo.Elements)
+                curpop = obj.metaTable(observation{1}).population;
+                p1 = curpop(randperm(obj.metaNP,1),:);
+                p2 = curpop(randperm(obj.metaNP,1),:);
+                action = curpop(obj.indcount,:);
+            else
+                p1 = rand(obj.ActionInfo.Dimension);
+                p2 = rand(obj.ActionInfo.Dimension);
+                action = rand(obj.ActionInfo.Dimension);
+            end
+
             Site = rand(size(action)) < 0.8;
             Offspring = action;
-            Parent2 = action(randperm(length(action)));
-            Parent3 = action(randperm(length(action)));
-            Offspring(Site) = Offspring(Site) + F*(Parent2(Site)-Parent3(Site));
-            % 确保动作在有效范围内
+            Offspring(Site) = Offspring(Site) + 0.5*(p1(Site)-p2(Site));
             action = Offspring;
-            action = saturate(this.ActionInfo,action);
-            action = max(min(action, obj.ActionInfo.UpperLimit), ...
-                        obj.ActionInfo.LowerLimit);
+   
+            obj.indcount = obj.indcount + 1;
         end
-        function learnImpl(obj, experience)
-            x = experience{1}{1};
-            u = experience{2}{1};
-            dx = experience{4}{1};  
-            allKeys = keys(obj.metaTable); % 获取所有键
+        function action = learnImpl(obj, experience)
+            pid = experience{1}{1};
+            ind = experience{2}{1};
+            fitness = experience{3};  
+            obj.metapop(pid).population = [obj.metapop(pid).population; ind];
+            obj.metapop(pid).fitness = [obj.metapop(pid).fitness;fitness]; 
+            if experience{5}
+                try
+                    for i = 1:length(obj.ObservationInfo.Elements)
+                        % 找到需要替换的索引
+                        replaceIdx = find(obj.metaTable(i).fitness < obj.metapop(i).fitness);
 
-        end
+                        % 替换 population 和 fitness
+                        obj.metaTable(i).population(replaceIdx, :) = obj.metapop(i).population(replaceIdx, :);
+                        obj.metaTable(i).fitness(replaceIdx) = obj.metapop(i).fitness(replaceIdx);
+
+                        % 清空 metapop 的 population 和 fitness
+                        obj.metapop(i).population = [];
+                        obj.metapop(i).fitness = [];
+                    end
+                catch ME
+                    % 捕获错误并输出调试信息
+                    disp('发生错误：');
+                    disp(ME.message); % 输出错误信息
+                    disp('错误发生在以下位置：');
+                    disp(ME.stack(1)); % 输出错误位置
+                end
+            end
+            action = getActionWithExplorationImpl(obj,experience{4});
+        end  
         
         function resetImpl(obj)
             % 重置智能体状态
             % 初始化或重置内部状态变量
-            obj.ExperienceBuffer = [];
+            for i = 1:length(obj.ObservationInfo.Elements)
+                obj.metaTable(i).population= rand(obj.metaNP,obj.ActionInfo.Dimension(1));
+                obj.metaTable(i).fitness = -Inf * ones(obj.metaNP,1);
+                obj.metapop(i).population = [];
+                obj.metapop(i).fitness = [];
+            end
+            obj.indcount = 1;
         end
     end
 end
