@@ -42,6 +42,7 @@ function varargout = platmetabbo(varargin)
 %   platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 %   platmetabbo('task', @Train, 'metabboComps', 'DQN_DE_MS', 'problemSet','BBOB')
 %   platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB','N',50,'D',10)
+%   platmetabbo('task', @Train, 'metabboComps', 'DE_DE_FCR', 'problemSet','BBOBEC','N',50,'D',10)
 %%  Test meta-optimizer
 %   platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
 %%  Test Traditional base-optimizer

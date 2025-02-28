@@ -28,9 +28,14 @@ switch problemset.psName
     case 'BBOBEC'
         for i = 1:24 
             pName = sprintf('BBOB_F%d', i);
-            trainingSet{i} = eval([pName '(pSetting{:})']);
+            if ismember(i, testList)
+                testingSet{count1} = eval([pName '(pSetting{:})']);
+                count1 = count1 + 1;
+            else
+                trainingSet{count2} = eval([pName '(pSetting{:})']);
+                count2 = count2 + 1;
+            end
         end
-        testingSet = trainingSet;
     case 'CF'
         for i = 1:10
             pName = sprintf('CF%d', i);

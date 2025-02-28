@@ -74,7 +74,7 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
             this.baseoptimizer.Init(this.curProblem);
             LoggedSignals = [];
             this.IsDone = IsDone;
-            Observation = this.curPIdx;
+            Observation = str2double(this.baseoptimizer.calCurProblemState());
         end
     end
 end

@@ -51,5 +51,10 @@ classdef DE_DE_FCR_Baseoptimizer < BASEOPTIMIZER
             bestPop = baseOptimizer.Population;
             done = true;
         end
+        
+        function state = calCurProblemState(this)
+            pname = class(this.curProblem);
+            state = regexp(pname, '\d+', 'match');
+        end
     end
 end

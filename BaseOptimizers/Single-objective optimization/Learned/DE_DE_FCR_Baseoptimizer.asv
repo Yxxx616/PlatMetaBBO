@@ -51,5 +51,8 @@ classdef DE_DE_FCR_Baseoptimizer < BASEOPTIMIZER
             bestPop = baseOptimizer.Population;
             done = true;
         end
+        
+        function state = calCurProblemState(Problem)
+            
     end
 end
