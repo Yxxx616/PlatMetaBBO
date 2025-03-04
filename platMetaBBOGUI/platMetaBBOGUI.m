@@ -33,7 +33,7 @@ classdef platMetaBBOGUI < handle
             tempPanel          = platMetaBBOGUI.APP(1,1,uipanel(obj.app.grid(1),'BorderType','none','BackgroundColor',[0 .25 .45]));
             obj.app.buttonT(1) = uibutton(tempPanel,'Position',[-5 -5 90 35],'Text','Modules','FontSize',14,'FontColor','k','BackgroundColor',[.94 .94 .94],'ButtonpushedFcn',{@obj.cb_tab,1});
             tempPanel          = platMetaBBOGUI.APP(1,2,uipanel(obj.app.grid(1),'BorderType','none','BackgroundColor',[0 .25 .45]));
-            tempImage          = uiimage(tempPanel,'Position',[0 3 99 21],'ImageSource',obj.icon.bar,'ScaleMethod','fill');
+%             tempImage          = uiimage(tempPanel,'Position',[0 3 99 21],'ImageSource',obj.icon.bar,'ScaleMethod','fill');
             
             % Create the menu
             obj.app.grid(2)   = platMetaBBOGUI.APP(2,1,uigridlayout(obj.app.maingrid,'RowHeight',{'1x',13,1},'ColumnWidth',{1,75,75,75,75,'1x',250,13,1},'Padding',[0 0 0 5],'RowSpacing',5));
@@ -50,11 +50,11 @@ classdef platMetaBBOGUI < handle
             obj.cb_module([],[],obj.icon.GUIsetting);
             obj.app.figure.Visible = 'on';
             
-            % Show images
-            index = num2str(randi(3));
-            if isfield(obj.icon,['image',index])
-                platMetaBBOGUI.APP([1 2],7,uiimage(obj.app.grid(2),'ImageSource',obj.icon.(['image',index]),'ImageClickedFcn',@(~,~)web(['https://bimk.github.io/Conference-Competition/?page=',index],'-browser')));
-            end
+%             % Show images
+%             index = num2str(randi(3));
+%             if isfield(obj.icon,['image',index])
+%                 platMetaBBOGUI.APP([1 2],7,uiimage(obj.app.grid(2),'ImageSource',obj.icon.(['image',index]),'ImageClickedFcn',@(~,~)web(['https://bimk.github.io/Conference-Competition/?page=',index],'-browser')));
+%             end
         end
     end
 	methods(Access = private)
@@ -62,19 +62,13 @@ classdef platMetaBBOGUI < handle
         function cb_tab(obj,~,~,type)
             switch type
                 case 1
-                    [obj.app.button(1:4).Visible] = deal(true);
-                    [obj.app.button(5:6).Visible] = deal(false);
+                    [obj.app.button(1:3).Visible] = deal(true);
                     obj.app.buttonT(1).BackgroundColor = [.94 .94 .94];
                     obj.app.buttonT(1).FontColor       = 'k';
-                    obj.app.buttonT(2).BackgroundColor = [0 .25 .45];
-                    obj.app.buttonT(2).FontColor       = 'w';
                 case 2
-                    [obj.app.button(1:4).Visible] = deal(false);
-                    [obj.app.button(5:6).Visible] = deal(true);
+                    [obj.app.button(1:3).Visible] = deal(false);
                     obj.app.buttonT(1).BackgroundColor = [0 .25 .45];
                     obj.app.buttonT(1).FontColor       = 'w';
-                    obj.app.buttonT(2).BackgroundColor = [.94 .94 .94];
-                    obj.app.buttonT(2).FontColor       = 'k';
             end
             obj.app.maingrid.RowHeight = {25,80,'1x'};
         end
@@ -87,8 +81,6 @@ classdef platMetaBBOGUI < handle
                 obj.app.tip.ImageSource = obj.icon.tip1;
                 obj.app.buttonT(1).BackgroundColor = [0 .25 .45];
                 obj.app.buttonT(1).FontColor       = 'w';
-                obj.app.buttonT(2).BackgroundColor = [0 .25 .45];
-                obj.app.buttonT(2).FontColor       = 'w';
                 obj.app.maingrid.RowHeight         = {25,0,'1x'};
             end
         end
@@ -97,8 +89,6 @@ classdef platMetaBBOGUI < handle
             if obj.app.maingrid.RowHeight{2} > 0 && ~obj.app.tip.UserData && obj.app.figure.CurrentPoint(2) < obj.app.figure.Position(4)-105
                 obj.app.buttonT(1).BackgroundColor = [0 .25 .45];
                 obj.app.buttonT(1).FontColor       = 'w';
-                obj.app.buttonT(2).BackgroundColor = [0 .25 .45];
-                obj.app.buttonT(2).FontColor       = 'w';
                 obj.app.maingrid.RowHeight         = {25,0,'1x'};
             end
         end

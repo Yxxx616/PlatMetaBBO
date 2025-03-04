@@ -7,13 +7,13 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
         metaObj
         indcount
         metapop
-        metaNP = 20
+        metaNP = 10
     end
     
     methods
         function obj = DE_DE_FCR_Metaoptimizer(observationInfo, actionInfo)
             obj = obj@rl.agent.CustomAgent();
-            for i = 1:length(observationInfo.Elements)
+            for i = 1:observationInfo.UpperLimit
                 obj.metaTable(i).population= rand(obj.metaNP,actionInfo.Dimension(1));
                 obj.metaTable(i).fitness = -Inf * ones(obj.metaNP,1);
                 obj.metapop(i).population = [];
@@ -26,12 +26,12 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
     end
     methods (Access = protected)
         function action = getActionImpl(obj,observation)
-            if observation{1} <= length(obj.ObservationInfo.Elements)
+            if observation{1} <= obj.ObservationInfo.UpperLimit
                 % 如果键存在，获取对应的值
                 curpop = obj.metaTable(observation{1}).population;
                 curobj = obj.metaTable(observation{1}).fitness;
-                [~,minidx]=min(curobj);
-                action = curpop(minidx,:);
+                [~,maxidx]=max(curobj);
+                action = curpop(maxidx,:);
             else
                 action = rand(obj.ActionInfo.Dimension);
             end
@@ -40,7 +40,7 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
             if obj.indcount>obj.metaNP
                 obj.indcount = 1;
             end
-            if observation{1} <= length(obj.ObservationInfo.Elements)
+            if observation{1} <= obj.ObservationInfo.UpperLimit
                 curpop = obj.metaTable(observation{1}).population;
                 p1 = curpop(randperm(obj.metaNP,1),:);
                 p2 = curpop(randperm(obj.metaNP,1),:);
@@ -66,7 +66,7 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
             obj.metapop(pid).fitness = [obj.metapop(pid).fitness;fitness]; 
             if experience{5}
                 try
-                    for i = 1:length(obj.ObservationInfo.Elements)
+                    for i = 1:obj.ObservationInfo.UpperLimit
                         % 找到需要替换的索引
                         replaceIdx = find(obj.metaTable(i).fitness < obj.metapop(i).fitness);
 
@@ -92,7 +92,7 @@ classdef DE_DE_FCR_Metaoptimizer < rl.agent.CustomAgent
         function resetImpl(obj)
             % 重置智能体状态
             % 初始化或重置内部状态变量
-            for i = 1:length(obj.ObservationInfo.Elements)
+            for i = 1:obj.ObservationInfo.UpperLimit
                 obj.metaTable(i).population= rand(obj.metaNP,obj.ActionInfo.Dimension(1));
                 obj.metaTable(i).fitness = -Inf * ones(obj.metaNP,1);
                 obj.metapop(i).population = [];

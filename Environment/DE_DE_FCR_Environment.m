@@ -5,16 +5,18 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
     properties
         % Specify and initialize environment's necessary properties    
         curProblem
+        bestPop % best population of curProblem
         baseoptimizer
         problemSet
         curPIdx
         indCount
-        metaNP = 20 %need to set the same with corresponding meta-optimizer
+        task
+        metaNP = 10 %need to set the same with corresponding meta-optimizer
     end
     
     properties
         % Initialize system state [x,dx,theta,dtheta]'
-        State = zeros(1,1)
+        State
     end
     
     properties(Access = protected)
@@ -24,9 +26,9 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
     methods              
         % Contructor method creates an instance of the environment
         % Change class name and constructor name accordingly
-        function this = DE_DE_FCR_Environment(ps, bo, ~)
+        function this = DE_DE_FCR_Environment(ps, bo, task)
             % Initialize Observation settings
-            ObservationInfo = rlFiniteSetSpec(1:length(ps));
+            ObservationInfo = rlNumericSpec([1 1], 'LowerLimit', 1, 'UpperLimit', 24); %the UpperLimit should be set to length(ps)
             ObservationInfo.Name = 'ProblemIdx';
             ObservationInfo.Description = 'F_';
             
@@ -37,8 +39,10 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
             % The following line implements built-in functions of RL env
             this = this@rl.env.MATLABEnvironment(ObservationInfo,ActionInfo);
             this.problemSet = ps;
+            this.bestPop = containers.Map;
             this.baseoptimizer = bo;
             this.curPIdx = 1;
+            this.task = task;
             this.indCount = 0;
         end
         function metanp = getmetanp(this)
@@ -54,27 +58,40 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
         end
        
         function [Observation,Reward,IsDone,LoggedSignals] = step(this, BOparameters)
-            IsDone = false;
-            [Reward, ~, ~, ~] = this.baseoptimizer.update(BOparameters, this.curProblem);
-            this.indCount = this.indCount + 1;
-            
-            
-            if this.indCount >= this.metaNP
-                this.curPIdx = this.curPIdx + 1;
-                this.indCount = 0;
-            end
-            
-            
-            if this.curPIdx > length(this.problemSet)
+            if strcmp(this.task, 'test')
+                [Reward, ~, ~, bestpop] = this.baseoptimizer.update(BOparameters, this.curProblem);
                 IsDone = true;
-                this.curProblem = this.problemSet{1}; 
+                this.bestPop(class(this.curProblem)) = bestpop;
+                LoggedSignals = [];
+                this.IsDone = IsDone;
+                Observation = str2double(this.baseoptimizer.calCurProblemState());
+                saveTestResults(this.baseoptimizer, this.curProblem);
             else
-                this.curProblem = this.problemSet{this.curPIdx};
+                IsDone = false;
+                [Reward, ~, ~, ~] = this.baseoptimizer.update(BOparameters, this.curProblem);
+                this.indCount = this.indCount + 1;
+
+
+                if this.indCount >= this.metaNP
+                    this.curPIdx = this.curPIdx + 1;
+                    this.indCount = 0;
+                end
+
+
+                if this.curPIdx > length(this.problemSet)
+                    IsDone = true;
+                    this.curProblem = this.problemSet{1}; 
+                else
+                    this.curProblem = this.problemSet{this.curPIdx};
+                end
+                this.baseoptimizer.Init(this.curProblem);
+                LoggedSignals = [];
+                this.IsDone = IsDone;
+                Observation = str2double(this.baseoptimizer.calCurProblemState());
             end
-            this.baseoptimizer.Init(this.curProblem);
-            LoggedSignals = [];
-            this.IsDone = IsDone;
-            Observation = str2double(this.baseoptimizer.calCurProblemState());
+        end
+        function bestPops = getBestPops(this)
+            bestPops=this.bestPop;
         end
     end
 end
