@@ -1,5 +1,5 @@
 classdef BBOB_F18 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Moderately ill-conditioned Schaffers F7 function
 % xopt --- 0 --- Optimal decision variables
 

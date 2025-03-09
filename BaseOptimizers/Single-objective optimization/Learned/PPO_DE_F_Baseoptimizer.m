@@ -1,5 +1,5 @@
 classdef PPO_DE_F_Baseoptimizer < BASEOPTIMIZER
-% <2025> <single> <real/integer> <large/none> <constrained/none> <learned>
+% <2025> <single> <real/integer> <large/none> <constrained/none> <learned/none>
 % USE DQN TO SELECT THE MUTATION STRATEGY OF Differential evolution
 % CR --- 0.9 --- Crossover constant
 % F  --- 0.5 --- Mutation factor

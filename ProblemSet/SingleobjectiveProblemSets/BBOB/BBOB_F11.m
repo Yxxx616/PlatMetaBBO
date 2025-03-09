@@ -1,5 +1,5 @@
 classdef BBOB_F11 < PROBLEM
-% <2009> <single> <real> <expensive/none> <learned>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Discus function
 % xopt --- 0 --- Optimal decision variables
 

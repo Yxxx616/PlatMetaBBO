@@ -1,5 +1,5 @@
 classdef DE_DE_FCR_Baseoptimizer < BASEOPTIMIZER
-% <1997> <single> <real/integer> <large/none> <constrained/none> <learned>
+% <1997> <single> <real/integer> <large/none> <constrained/none> <learned/none>
 % Differential evolution
 % CR --- 0.9 --- Crossover constant
 % F  --- 0.5 --- Mutation factor

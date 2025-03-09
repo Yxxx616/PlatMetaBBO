@@ -1,5 +1,5 @@
 function score = Min_value(Population,~)
-% <min> <single> <real/integer/label/binary/permutation> <large/none> <constrained/none> <expensive/none> <sparse/none> <dynamic/none>
+% <min> <single> <real/integer/label/binary/permutation> <large/none> <constrained/none> <expensive/none> <sparse/none> <dynamic/none> <learned/none>
 % The minimum objective value
 
 %------------------------------- Copyright --------------------------------

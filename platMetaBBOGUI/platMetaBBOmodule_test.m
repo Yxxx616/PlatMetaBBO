@@ -194,11 +194,11 @@ classdef platMetaBBOmodule_test < handle
         function outputFcn(obj,Algorithm,Problem)
             obj.app.slider.Value = Problem.FE/max(Problem.FE,Problem.maxFE);
             obj.cb_slider();
-            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatMetaBBO:Termination','');
             if strcmp(obj.app.buttonC(1).Text,'Continue')
                 waitfor(obj.app.buttonC(1),'Text');
             end
-            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatMetaBBO:Termination','');
         end
         %% Show the specified data
         function cb_slider(obj,~,~,ax)

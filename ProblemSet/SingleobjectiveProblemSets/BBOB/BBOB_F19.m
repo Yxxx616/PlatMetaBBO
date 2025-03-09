@@ -1,5 +1,5 @@
 classdef BBOB_F19 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Composite Griewank-Rosenbrock function F8F2
 % xopt --- 0 --- Optimal decision variables
 

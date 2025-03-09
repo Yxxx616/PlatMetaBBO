@@ -33,7 +33,7 @@ classdef platMetaBBOmodule_exp < handle
             obj.app.labelA(4)  = platMetaBBOGUI.APP(11,[1 2],uilabel(obj.app.grid(1),'Text','BaseOptimizers','FontSize',13,'FontColor',[.2 .4 .7],'FontWeight','bold'));
             obj.app.labelA(5)  = platMetaBBOGUI.APP(11,3,uilabel(obj.app.grid(1),'HorizontalAlignment','right','FontSize',10,'FontColor',[.2 .4 .7]));
             obj.app.listA(1)   = platMetaBBOGUI.APP(12,[1 3],uilistbox(obj.app.grid(1),'FontColor',[.2 .4 .7]));
-            obj.app.labelA(6)  = platMetaBBOGUI.APP(14,[1 2],uilabel(obj.app.grid(1),'Text','ProblemSets','FontSize',13,'FontColor',[.9 .5 .2],'FontWeight','bold'));
+            obj.app.labelA(6)  = platMetaBBOGUI.APP(14,[1 2],uilabel(obj.app.grid(1),'Text','Problems','FontSize',13,'FontColor',[.9 .5 .2],'FontWeight','bold'));
             obj.app.labelA(7)  = platMetaBBOGUI.APP(14,3,uilabel(obj.app.grid(1),'HorizontalAlignment','right','FontSize',10,'FontColor',[.9 .5 .2]));
             obj.app.listA(2)   = platMetaBBOGUI.APP(15,[1 3],uilistbox(obj.app.grid(1),'FontColor',[.9 .5 .2]));
             obj.app.dropA(1)   = platMetaBBOGUI.APP(11,2,uidropdown(obj.app.grid(1),'BackgroundColor','w','FontColor',[.2 .4 .7],'Items',{'All year'},'ValueChangedFcn',@(h,~)platMetaBBOGUI.UpdateAlgProListYear(obj.app.listA(1),h,obj.app.labelA(5),obj.platMetaBBOGUI.algList)));
@@ -284,11 +284,11 @@ classdef platMetaBBOmodule_exp < handle
         end
         %% Output function
         function outputFcn(obj,Algorithm,Problem)
-            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatMetaBBO:Termination','');
             if strcmp(obj.app.buttonC(1).Text,'Continue')
                 waitfor(obj.app.buttonC(1),'Text');
             end
-            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonC(2).Enable,'on'),'PlatMetaBBO:Termination','');
         end
         %% Show the specified columns
         function TableUpdateColumn(obj,~,~)

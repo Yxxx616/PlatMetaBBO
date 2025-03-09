@@ -1,5 +1,5 @@
 classdef BBOB_F22 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Gallagher's Gaussian 21-hi peaks function
 
 %------------------------------- Reference --------------------------------

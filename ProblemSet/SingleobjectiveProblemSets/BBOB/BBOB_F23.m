@@ -1,5 +1,5 @@
 classdef BBOB_F23 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Katsuura function
 % xopt --- 0 --- Optimal decision variables
 

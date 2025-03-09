@@ -1,5 +1,5 @@
 classdef BBOB_F4 < PROBLEM
-% <2009> <single> <real> <expensive/none> <learned>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Buche-Rastrigin function
 % xopt --- 0 --- Optimal decision variables
 

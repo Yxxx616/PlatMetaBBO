@@ -1,5 +1,5 @@
 function score = Feasible_rate(Population,~)
-% <max> <single/multi/many> <real/integer/label/binary/permutation> <large/none> <constrained> <expensive/none> <multimodal/none> <sparse/none> <dynamic/none> <multitask/none> <bilevel/none> <robust/none>
+% <max> <single/multi/many> <real/integer/label/binary/permutation> <large/none> <constrained> <expensive/none> <multimodal/none> <sparse/none> <dynamic/none> <multitask/none> <bilevel/none> <robust/none> <learned/none>
 % The rate of feasible solutions
 
 %------------------------------- Copyright --------------------------------

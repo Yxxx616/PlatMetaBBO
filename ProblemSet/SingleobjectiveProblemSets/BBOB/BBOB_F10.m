@@ -1,5 +1,5 @@
 classdef BBOB_F10 < PROBLEM
-% <2009> <single> <real> <expensive/none> <learned>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Rotated ellipsoidal function
 % xopt --- 0 --- Optimal decision variables
 

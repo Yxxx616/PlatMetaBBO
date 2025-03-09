@@ -1,5 +1,5 @@
 classdef BBOB_F5 < PROBLEM
-% <2009> <single> <real> <expensive/none> <learned>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Linear slope
 
 %------------------------------- Reference --------------------------------

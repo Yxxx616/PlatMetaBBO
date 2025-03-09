@@ -1,5 +1,5 @@
 classdef BBOB_F16 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Weierstrass function
 % xopt --- 0 --- Optimal decision variables
 

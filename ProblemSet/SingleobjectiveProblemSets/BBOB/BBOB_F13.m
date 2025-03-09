@@ -1,5 +1,5 @@
 classdef BBOB_F13 < PROBLEM
-% <2009> <single> <real> <expensive/none> <learned>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Sharp ridge function
 % xopt --- 0 --- Optimal decision variables
 

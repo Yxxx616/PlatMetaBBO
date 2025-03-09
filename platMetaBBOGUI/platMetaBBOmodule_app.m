@@ -576,8 +576,22 @@ classdef platMetaBBOmodule_app < handle
                 set([obj.pro.edit,obj.con.edit,obj.pro.button,obj.pro.button2,obj.con.button,obj.con.button2],'Enable',false);
                 % Execute the algorithm
                 try
-                    ALG.Solve(PRO);
-                    obj.cb_stop();
+                    algName = class(ALG);
+                    if contains(algName, 'Baseoptimizer')
+                        parts = strsplit(algName, '_'); % 按下划线分割字符串
+                        comp = parts{1}; % 第一部分
+                        for i = 2:length(parts)-1
+                            comp = strcat(comp, '_', parts{i}); % 重新拼接前两部分
+                        end
+                        env = str2func([comp '_Environment']);
+                        mo = str2func([comp '_Metaoptimizer']);
+                        task = Test(mo, ALG, env, PRO);
+                        task.run();
+                        obj.cb_stop();
+                    else
+                        ALG.Solve(PRO);
+                        obj.cb_stop();
+                    end
                 catch err
                     uialert(obj.platMetaBBOGUI.app.figure,'The algorithm terminates unexpectedly, please refer to the command window for details.','Error');
                     obj.cb_stop();
@@ -611,11 +625,11 @@ classdef platMetaBBOmodule_app < handle
         function outputFcn(obj,Algorithm,Problem)
             obj.app.slider.Value = Problem.FE/max(Problem.FE,Problem.maxFE);
             obj.cb_slider();
-            assert(strcmp(obj.app.buttonD(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonD(2).Enable,'on'),'PlatMetaBBO:Termination','');
             if strcmp(obj.app.buttonD(1).Text,'Continue')
                 waitfor(obj.app.buttonD(1),'Text');
             end
-            assert(strcmp(obj.app.buttonD(2).Enable,'on'),'PlatEMO:Termination','');
+            assert(strcmp(obj.app.buttonD(2).Enable,'on'),'PlatMetaBBO:Termination','');
         end
         %% Show the specified data
         function cb_slider(obj,~,~,ax)

@@ -1,5 +1,5 @@
 classdef BBOB_F24 < PROBLEM
-% <2009> <single> <real> <expensive/none>
+% <2009> <single> <real> <expensive/none> <learned/none>
 % Lunacek bi-Rastrigin function
 
 %------------------------------- Reference --------------------------------

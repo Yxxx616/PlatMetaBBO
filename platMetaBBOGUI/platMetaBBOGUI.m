@@ -25,7 +25,7 @@ classdef platMetaBBOGUI < handle
             obj.readList();
             
             % Create the window
-            obj.app.figure   = uifigure('Name','PlatMetaBBO v1.0','Position',[0 0 1200 650],'Interruptible','off','icon',obj.icon.logo1,'BusyAction','cancel','Visible','off','WindowButtonMotionFcn',@(~,~)[]);
+            obj.app.figure   = uifigure('Name','PlatMetaBBO v1.0','Position',[0 0 1200 650],'Interruptible','off','BusyAction','cancel','Visible','off','WindowButtonMotionFcn',@(~,~)[]);
             obj.app.maingrid = uigridlayout(obj.app.figure,'RowHeight',{25,80,'1x'},'ColumnWidth',{'1x'},'Padding',[0 0 0 0],'RowSpacing',0);
             
             % Create the tab buttons
@@ -181,7 +181,7 @@ classdef platMetaBBOGUI < handle
             stateButton(14) = platMetaBBOGUI.APP(8,3,uibutton(grid,'state','Text','dynamic','FontSize',11,'FontColor',[.15 .6 .2],'BackgroundColor','w','Value',values(14),'Tooltip','The objectives vary periodically','ValueChangedFcn',{cbFcn,14}));
             stateButton(15) = platMetaBBOGUI.APP(9,1,uibutton(grid,'state','Text','multitask','FontSize',11,'FontColor',[.15 .6 .2],'BackgroundColor','w','Value',values(15),'Tooltip','The problem has multiple tasks to be solved simultaneously','ValueChangedFcn',{cbFcn,15}));
             stateButton(16) = platMetaBBOGUI.APP(9,2,uibutton(grid,'state','Text','robust','FontSize',11,'FontColor',[.15 .6 .2],'BackgroundColor','w','Value',values(16),'Tooltip','The problem has two nested objectives','ValueChangedFcn',{cbFcn,16}));
-            stateButton(17) = platMetaBBOGUI.APP(9,3,uibutton(grid,'state','Text','learned','FontSize',11,'FontColor',[.15 .6 .2],'BackgroundColor','w','Value',values(17),'Tooltip','The objectives are influenced by uncertain factors','ValueChangedFcn',{cbFcn,17}));
+            stateButton(17) = platMetaBBOGUI.APP(9,3,uibutton(grid,'state','Text','learned','FontSize',11,'FontColor',[.15 .6 .2],'BackgroundColor','w','Value',values(17),'Tooltip','The optimized algorithm is learned','ValueChangedFcn',{cbFcn,17}));
         end
         %% Update the list of algorithms and problems
         function func = UpdateAlgProList(index,stateButton,varargin)
