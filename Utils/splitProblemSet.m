@@ -2,6 +2,39 @@ function [trainingSet,testingSet] = splitProblemSet(problemset)
 %SPLITPROBLEMSET 此处显示有关此函数的摘要
 pSetting = problemset.pSetting;
 switch problemset.psName
+    case 'TSPs'
+        tspInstancesDir = 'TSP_Instances';
+        if ~exist(tspInstancesDir, 'dir')
+            mkdir(tspInstancesDir);
+        end
+        instanceFiles = dir(fullfile(tspInstancesDir, 'TSP_Instance_*.mat'));
+        if length(instanceFiles) <= 0
+            numInstances = 100;
+            cityRange = [3,100];
+            for i = 1 : numInstances
+                numCities = randi(cityRange);
+                tspInstance = TSPs();
+                tspInstance.generateIns(numCities);
+                filename = fullfile(tspInstancesDir, sprintf('TSP_Instance_%d.mat', i));
+                tspInstance.saveInstance(filename);
+                if i <= 70
+                    trainingSet{i} = tspInstance;
+                else
+                    testingSet{i-350} = tspInstance;
+                end
+            end
+        else
+            numInstances = 100; %length(instanceFiles);
+            for i = 1:numInstances
+                data = load(fullfile(tspInstancesDir, instanceFiles(i).name));
+                tspInstance = data.obj;
+                if i <= floor(numInstances*0.7)
+                    trainingSet{i} = tspInstance;
+                else
+                    testingSet{i-floor(numInstances*0.7)} = tspInstance;
+                end
+            end
+        end   
     case 'LIRCMOP'
         for i = 1:14
             pName = sprintf('LIRCMOP%d', i);

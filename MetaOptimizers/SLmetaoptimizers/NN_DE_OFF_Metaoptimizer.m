@@ -1,4 +1,4 @@
-classdef DQN_DE_MS_Metaoptimizer < rl.agent.AbstractAgentMemoryTarget
+classdef NN_DE_OFF_Metaoptimizer < rl.agent.AbstractAgentMemoryTarget
     properties (Access = private)
         % Critic function approximator
         Critic
@@ -16,7 +16,7 @@ classdef DQN_DE_MS_Metaoptimizer < rl.agent.AbstractAgentMemoryTarget
     end
 
     methods
-        function this = DQN_DE_MS_Metaoptimizer(obsInfo, actInfo)
+        function this = NN_DE_OFF_Metaoptimizer(obsInfo, actInfo)
             AgentType = "DQN";
             [ObservationInfo,ActionInfo,InitOptions,AgentOptions] = rl.util.parseAgentInitializationInputs(AgentType,obsInfo,actInfo);
             Critic = rl.representation.rlQValueRepresentation.createDefault(ObservationInfo, ActionInfo, InitOptions, 'multiOutput');

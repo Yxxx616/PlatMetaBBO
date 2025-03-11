@@ -12,16 +12,6 @@ classdef BASEOPTIMIZER < handle & matlab.mixin.Heterogeneous
     end
     methods(Access = protected)
         function obj = BASEOPTIMIZER(varargin)
-        %BASEOPTIMIZER - The constructor of BASEOPTIMIZER.
-        %
-        %   Alg = algName('Name',Value,'Name',Value,...) generates an
-        %   object with the properties specified by the inputs. algName is
-        %   a subclass of BASEOPTIMIZER, while BASEOPTIMIZER cannot be instantiated
-        %   directly.
-        %
-        %   Example:
-        %        Algorithm = MOEAD('parameter',4,'save',1)
-
             isStr = find(cellfun(@ischar,varargin(1:end-1))&~cellfun(@isempty,varargin(2:end)));
             for i = isStr(ismember(varargin(isStr),{'parameter','save','run','metName','outputFcn'}))
                 obj.(varargin{i}) = varargin{i+1};
@@ -125,7 +115,7 @@ classdef BASEOPTIMIZER < handle & matlab.mixin.Heterogeneous
 end
 
 function DefaultOutput(Algorithm,Problem)
-% The default output function of BASEOPTIMIZER
+% The default output function of BASEOPTIMIZER no figure;
     clc; fprintf('%s on %d-objective %d-variable %s (%6.2f%%), %.2fs passed...\n',class(Algorithm),Problem.M,Problem.D,class(Problem),Problem.FE/Problem.maxFE*100,Algorithm.metric.runtime);
     if Problem.FE >= Problem.maxFE
         if Algorithm.save < 0
@@ -170,4 +160,11 @@ function DefaultOutput(Algorithm,Problem)
             save([file,num2str(Algorithm.run),'.mat'],'result','metric');
         end
     end
+end
+
+function cb_menu(h)
+% Switch between the selected menu
+
+    set(get(get(h,'Parent'),'Children'),'Checked','off');
+    set(h,'Checked','on');
 end

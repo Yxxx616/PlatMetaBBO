@@ -43,8 +43,13 @@ function varargout = platmetabbo(varargin)
 %   platmetabbo('task', @Train, 'metabboComps', 'DQN_DE_MS', 'problemSet','BBOB')
 %   platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB','N',50,'D',10)
 %   platmetabbo('task', @Train, 'metabboComps', 'DE_DE_FCR', 'problemSet','BBOBEC','N',50,'D',10)
-%%  Test meta-optimizer
-%   platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB')
+%%  Test meta-optimizer （测试集和训练集需要保持一致）
+%   测试RL-based meta-optimizer：DDPG_DE_F（实现使用DDPG在线调整DE参数F）
+%   platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB') 
+%   测试SL-based meta-optimizer：MLP_Alg_Rec（实现使用MLP神经网络对不同TSP示例算法推荐ABC/CSO/DE/PSO/SA）
+%   platmetabbo('task', @Test, 'metabboComps', 'MLP_Alg_Rec', 'problemSet','TSPs')
+%   测试EC-based meta-optimizer：DE_DE_FCR（实现使用DE离线调整DE参数F和CR）
+%   platmetabbo('task', @Test, 'metabboComps', 'DE_DE_FCR', 'problemSet','BBOB')
 %%  Test Traditional base-optimizer
 %   platmetabbo('task', @TestTraditionalAlg,'algorithm',@PSO,'problem',@SOP_F1,'N',50,'maxFE',20000)
 
@@ -83,15 +88,16 @@ function varargout = platmetabbo(varargin)
                     Algorithm = ALG(input{:});
                 end
                 Algorithm.Solve(Problem);
+                if nargout > 0
+                    P = Algorithm.result{end};
+                    varargout = {P.decs,P.objs,P.cons};
+                end
             else
                 [metaOptimizer, baseOptimizer,env, problemSet] = getConfig(varargin);
                 task = taskName(metaOptimizer, baseOptimizer, env, problemSet);
-                result = task.run(); %
-                if numel(fieldnames(result)) > 1
-                    varargout = result.bestPops.values; 
-                end
+                result = task.run(); 
+                close all;
             end
-            
         end
     end
 end

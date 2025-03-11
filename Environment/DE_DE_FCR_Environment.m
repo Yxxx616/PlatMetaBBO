@@ -63,6 +63,7 @@ classdef DE_DE_FCR_Environment < rl.env.MATLABEnvironment
                 IsDone = true;
                 this.bestPop(class(this.curProblem)) = bestpop;
                 LoggedSignals = [];
+                this.curPIdx = this.curPIdx + 1;
                 this.IsDone = IsDone;
                 Observation = str2double(this.baseoptimizer.calCurProblemState());
                 saveTestResults(this.baseoptimizer, this.curProblem);
