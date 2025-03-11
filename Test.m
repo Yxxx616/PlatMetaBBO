@@ -22,11 +22,11 @@ classdef Test < handle
         end
         
         function results = run(obj)
-            simOpts = rlSimulationOptions('NumSimulations',length(obj.TestingSet)); %'MaxSteps',1000,...
+            simOpts = rlSimulationOptions('NumSimulations',length(obj.TestingSet)); 
             testingInfo = sim(obj.env,obj.MetaOptimizer,simOpts);
-            bestPops = obj.env.getBestPops();
+%             bestPops = obj.env.getBestPops();
             results.testingInfo = testingInfo;
-            results.bestPops = bestPops;
+%             results.bestPops = bestPops;
         end
     end
 end
