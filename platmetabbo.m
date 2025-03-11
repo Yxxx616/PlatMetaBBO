@@ -44,11 +44,13 @@ function varargout = platmetabbo(varargin)
 %   platmetabbo('task', @Train, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB','N',50,'D',10)
 %   platmetabbo('task', @Train, 'metabboComps', 'DE_DE_FCR', 'problemSet','BBOBEC','N',50,'D',10)
 %%  Test meta-optimizer （测试集和训练集需要保持一致）
-%   测试RL-based meta-optimizer：DDPG_DE_F（实现使用DDPG在线调整DE参数F）
+%   1.测试RL-based meta-optimizer：DDPG_DE_F（实现使用DDPG在线调整DE参数F）
 %   platmetabbo('task', @Test, 'metabboComps', 'DDPG_DE_F', 'problemSet','BBOB') 
-%   测试SL-based meta-optimizer：MLP_Alg_Rec（实现使用MLP神经网络对不同TSP示例算法推荐ABC/CSO/DE/PSO/SA）
+%   测试RL-based meta-optimizer：DQN_DE_MS（实现使用DQN在线调整DE的变异策略MS）
+%   platmetabbo('task', @Test, 'metabboComps', 'DQN_DE_MS', 'problemSet','BBOB')
+%   2.测试SL-based meta-optimizer：MLP_Alg_Rec（实现使用MLP神经网络对不同TSP示例算法推荐ABC/CSO/DE/PSO/SA）
 %   platmetabbo('task', @Test, 'metabboComps', 'MLP_Alg_Rec', 'problemSet','TSPs')
-%   测试EC-based meta-optimizer：DE_DE_FCR（实现使用DE离线调整DE参数F和CR）
+%   3.测试EC-based meta-optimizer：DE_DE_FCR（实现使用DE离线调整DE参数F和CR）
 %   platmetabbo('task', @Test, 'metabboComps', 'DE_DE_FCR', 'problemSet','BBOB')
 %%  Test Traditional base-optimizer
 %   platmetabbo('task', @TestTraditionalAlg,'algorithm',@PSO,'problem',@SOP_F1,'N',50,'maxFE',20000)
